@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:meals/core/routing/router_generation_config.dart';
 import 'package:meals/core/styles/app_colors.dart';
+import 'package:meals/features/onBoarding/services/onboarding_services.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await OnboardingServices.initializeSharedPreferencesStorage();
+
+  bool isFirstTime = OnboardingServices.isFirstTime();
+
+  runApp(MyApp(isFirstTime: isFirstTime));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isFirstTime;
+
+  const MyApp({super.key, required this.isFirstTime});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +27,9 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp.router(
           title: 'Meals',
-          routerConfig: RouterGenerationConfig.goRouter,
+          routerConfig: RouterGenerationConfig(
+            isFirstTime: isFirstTime,
+          ).goRouter,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: AppColors.primaryColor,

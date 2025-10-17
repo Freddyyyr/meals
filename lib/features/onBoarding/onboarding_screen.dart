@@ -7,6 +7,7 @@ import 'package:meals/core/app_assets/app_assets.dart';
 import 'package:meals/core/routing/app_routes.dart';
 import 'package:meals/core/styles/app_colors.dart';
 import 'package:meals/core/styles/app_text_styles.dart';
+import 'package:meals/features/onBoarding/services/onboarding_services.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -21,12 +22,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     'Use Our App The Best Choice',
     ' Our App Your Ultimate Choice',
   ];
+
   List<String> descriptions = [
     'Add Your Meals and its Ingredients and we will save it for you',
     'The best choice for your kitchen do not hesitate',
     'All the best restaurants and their top menus are ready for you',
   ];
+
   int currentIndex = 0;
+
   CarouselSliderController carouselController = CarouselSliderController();
 
   @override
@@ -121,7 +125,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   const Spacer(),
                   currentIndex >= 2
                       ? InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            await OnboardingServices.setFirstTimeWithFalse();
                             GoRouter.of(
                               context,
                             ).pushReplacementNamed(AppRoutes.homeScreen);
@@ -145,7 +150,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             InkWell(
-                              onTap: () {
+                              onTap: () async {
+                                await OnboardingServices.setFirstTimeWithFalse();
                                 GoRouter.of(
                                   context,
                                 ).pushReplacementNamed(AppRoutes.homeScreen);
