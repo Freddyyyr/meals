@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:meals/core/routing/app_routes.dart';
 import 'package:meals/core/styles/app_colors.dart';
 import 'package:meals/core/styles/app_text_styles.dart';
 import 'package:meals/features/home_screen/data/db_helper/db_helper.dart';
@@ -14,17 +16,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    dbHelper.insertMeal(
-      Meal(
-        name: "Pizza",
-        imageUrl:
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Pizza-3007395.jpg/1200px-Pizza-3007395.jpg",
-        description: "Pizza Margerita",
-        time: "40-50",
-        rate: 5,
-      ),
-    );
-
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -99,7 +90,9 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            GoRouter.of(context).pushNamed(AppRoutes.addMealScreen);
+          },
           shape: const CircleBorder(),
           backgroundColor: AppColors.primaryColor,
 
