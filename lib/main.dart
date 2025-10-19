@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: AppColors.primaryColor,
-              brightness: Brightness.dark,
+              // brightness: Brightness.dark,
             ),
           ),
         );
