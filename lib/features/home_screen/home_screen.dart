@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:meals/core/app_assets/app_assets.dart';
 import 'package:meals/core/styles/app_colors.dart';
 import 'package:meals/core/styles/app_text_styles.dart';
+import 'package:meals/features/home_screen/data/db_helper/db_helper.dart';
+import 'package:meals/features/home_screen/data/models/meal_model.dart';
 import 'package:meals/features/home_screen/widgets/custom_food_item_widget.dart';
 import 'package:meals/features/home_screen/widgets/custom_top_home_widget.dart';
+
+DatabaseHelper dbHelper = DatabaseHelper.instance;
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    dbHelper.insertMeal(
+      Meal(
+        name: "Pizza",
+        imageUrl:
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Pizza-3007395.jpg/1200px-Pizza-3007395.jpg",
+        description: "Pizza Margerita",
+        time: "40-50",
+        rate: 5,
+      ),
+    );
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -33,22 +47,48 @@ class HomeScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 25.h),
                     Expanded(
-                      child: GridView.builder(
-                        itemCount: 10,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.8,
-                          mainAxisSpacing: 20.h,
-                          crossAxisSpacing: 20.w,
-                        ),
-                        itemBuilder: (context, index) {
-                          return CustomFoodItemWidget(
-                            imageUrl: AppAssets.cheeseBurger,
-                            name: "Cheese Burger",
-                            rate: 4.5,
-                            time: "10 - 15",
-                            onTap: () {},
-                          );
+                      child: FutureBuilder(
+                        future: dbHelper.getMeals(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.primaryColor,
+                              ),
+                            );
+                          } else if (snapshot.hasData) {
+                            if (snapshot.data!.isEmpty) {
+                              return Center(child: Text("No meals found"));
+                            }
+
+                            return GridView.builder(
+                              itemCount: snapshot.data!.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 0.8,
+                                    mainAxisSpacing: 20.h,
+                                    crossAxisSpacing: 20.w,
+                                  ),
+                              itemBuilder: (context, index) {
+                                Meal meal = snapshot.data![index];
+                                return CustomFoodItemWidget(
+                                  imageUrl: meal.imageUrl,
+                                  name: meal.name,
+                                  rate: meal.rate,
+                                  time: meal.time,
+                                  onTap: () {},
+                                );
+                              },
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text("Error: ${snapshot.error}"),
+                            );
+                          } else {
+                            return Center(child: Text("No data"));
+                          }
                         },
                       ),
                     ),

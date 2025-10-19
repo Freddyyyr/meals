@@ -6,6 +6,7 @@ import 'package:meals/features/onBoarding/services/onboarding_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await OnboardingServices.initializeSharedPreferencesStorage();
 
   bool isFirstTime = OnboardingServices.isFirstTime();

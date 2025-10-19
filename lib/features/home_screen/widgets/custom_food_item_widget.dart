@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:meals/core/styles/app_colors.dart';
@@ -33,7 +34,14 @@ class CustomFoodItemWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(imageUrl, width: 160.w, height: 106.h),
+              CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                width: 160.w,
+                height: 106.h,
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.error, color: AppColors.primaryColor),
+              ),
               SizedBox(height: 8.h),
               SizedBox(
                 width: 120.w,
