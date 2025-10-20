@@ -23,7 +23,7 @@ class CustomFoodItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onDoubleTap: onTap,
+      onTap: onTap,
       child: SizedBox(
         child: Container(
           padding: EdgeInsets.all(8.sp),

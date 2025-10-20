@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -69,7 +71,13 @@ class HomeScreen extends StatelessWidget {
                                   name: meal.name,
                                   rate: meal.rate,
                                   time: meal.time,
-                                  onTap: () {},
+                                  onTap: () {
+                                    log("User clicked on widget");
+                                    GoRouter.of(context).pushNamed(
+                                      AppRoutes.mealDetailsScreen,
+                                      extra: meal,
+                                    );
+                                  },
                                 );
                               },
                             );
